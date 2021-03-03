@@ -65,3 +65,7 @@ jacocoTestReport {
 checkstyle {
     toolVersion '8.38'
 }
+
+jar {
+    archivesBaseName = "restaurantregister"
+}
