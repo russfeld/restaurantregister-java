@@ -1,4 +1,4 @@
-package edu.ksu.cs.cc410.restaurantregister;
+package edu.ksu.cs.cc410.register;
 
 import static org.hamcrest.MatcherAssert.assertThat; 
 import static org.hamcrest.Matchers.closeTo;
@@ -136,6 +136,20 @@ public class CashDrawerTest {
         drawer.addCount(CashDenomination.PENNY, 1);
         Exception e = assertThrows(IllegalStateException.class, () -> drawer.close());
         assertThat(e.getMessage(), is("Cash drawer contents incorrect."));
+    }
+    
+    /**
+     * Removing too many should throw exception.
+     */
+    @Test
+    public void testRemoveTooManyThrowsException() {
+        CashDrawer drawer = new CashDrawer();
+        drawer.open(0.0);
+        for (CashDenomination denom : CashDenomination.values()) {
+            Exception e = assertThrows(IllegalArgumentException.class, () -> 
+                                      drawer.removeCount(denom, 11));
+            assertThat(e.getMessage(), is("Cannot remove more than are present."));
+        }
     }
     
     

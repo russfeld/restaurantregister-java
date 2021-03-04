@@ -1,4 +1,4 @@
-package edu.ksu.cs.cc410.restaurantregister;
+package edu.ksu.cs.cc410.register;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -39,7 +39,6 @@ public class ReceiptPrinter {
      */
     public ReceiptPrinter() throws IOException {
         this.format = DateTimeFormatter.ofPattern("yyyyMMdd-HH:mm:ss");
-        String filename = ("receipt.txt");
         this.writer = new BufferedWriter(new FileWriter("receipt.txt", true));
         this.started = false;
     }
@@ -48,6 +47,7 @@ public class ReceiptPrinter {
      * Start printing a receipt.
      *
      * @throws IOException if the file cannot be written
+     * @throws IllegalStateException if the receipt has already been started
      */
     public void startReceipt() throws IOException {
         if (this.started) {
@@ -64,6 +64,7 @@ public class ReceiptPrinter {
      *
      * @param text the line to print
      * @throws IllegalArgumentException if the text is longer than 40 chars
+     * @throws IllegalStateException if the receipt is not started
      * @throws IOException if the file cannot be written
      */
     public void printLine(String text) throws IOException {
@@ -79,6 +80,7 @@ public class ReceiptPrinter {
     /**
      * Ends a receipt.
      *
+     * @throws IllegalStateException if the receipt is not started
      * @throws IOException if the file cannot be written.
      */
     public void endReceipt() throws IOException {

@@ -1,4 +1,4 @@
-package edu.ksu.cs.cc410.restaurantregister;
+package edu.ksu.cs.cc410.register;
 
 import static org.hamcrest.MatcherAssert.assertThat; 
 import static org.hamcrest.Matchers.closeTo;

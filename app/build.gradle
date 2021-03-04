@@ -33,7 +33,7 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'edu.ksu.cs.cc410.restaurantregister.Main'
+    mainClass = 'edu.ksu.cs.cc410.register.Main'
 }
 
 tasks.named('test') {
@@ -67,5 +67,5 @@ checkstyle {
 }
 
 jar {
-    archivesBaseName = "restaurantregister"
+    archivesBaseName = "register"
 }

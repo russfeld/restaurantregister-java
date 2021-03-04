@@ -1,4 +1,4 @@
-package edu.ksu.cs.cc410.restaurantregister;
+package edu.ksu.cs.cc410.register;
 
 import java.util.Random;
 
@@ -11,7 +11,7 @@ import java.util.Random;
  *
  * @author Russell Feldhausen russfeld@ksu.edu
  * @version 0.1
- * @see edu.ksu.cs.cc410.restaurantregister.CardTransactionResult
+ * @see edu.ksu.cs.cc410.register.CardTransactionResult
  */
 public class CardReader {
     

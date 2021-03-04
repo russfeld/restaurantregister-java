@@ -1,4 +1,4 @@
-package edu.ksu.cs.cc410.restaurantregister;
+package edu.ksu.cs.cc410.register;
 
 /**
  * Enumeration of credit card transaction results.

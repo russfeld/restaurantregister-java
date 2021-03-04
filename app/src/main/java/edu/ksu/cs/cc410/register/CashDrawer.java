@@ -1,4 +1,4 @@
-package edu.ksu.cs.cc410.restaurantregister;
+package edu.ksu.cs.cc410.register;
 
 import java.lang.IllegalArgumentException;
 import java.lang.IllegalStateException;
@@ -20,7 +20,7 @@ import java.util.HashMap;
  *
  * @author Russell Feldhausen russfeld@ksu.edu
  * @version 0.1
- * @see edu.ksu.cs.cc410.restaurantregister.CashDenomination
+ * @see edu.ksu.cs.cc410.register.CashDenomination
  */
 public class CashDrawer {
     
@@ -48,11 +48,10 @@ public class CashDrawer {
      * @throws IllegalStateException if the drawer is not closed
      */
     public int getCount(CashDenomination denom) {
-        if (!this.open) {
-            return this.contents.get(denom);
-        } else {
+        if (this.open) {
             throw new IllegalStateException("Cash drawer must be closed to count.");
         }
+        return this.contents.get(denom);
     }
     
     /**
@@ -62,15 +61,14 @@ public class CashDrawer {
      * @throws IllegalStateException if the drawer is not closed
      */
     public double getTotal() {
-        if (!this.open) {
-            double sum = 0.0;
-            for (CashDenomination denom : CashDenomination.values()) {
-                sum += this.contents.get(denom) * denom.getValue();
-            }
-            return sum;
-        } else {
-            throw new IllegalStateException("Cash drawer must be closed to count.");
+        if (this.open) {
+            throw new IllegalStateException("Cash drawer must be closed to count.");  
         }
+        double sum = 0.0;
+        for (CashDenomination denom : CashDenomination.values()) {
+            sum += this.contents.get(denom) * denom.getValue();
+        }
+        return sum;
     }
     
     /**
@@ -81,11 +79,10 @@ public class CashDrawer {
      * @throws IllegalStateException if the drawer is not open
      */
     public void addCount(CashDenomination denom, int count) {
-        if (this.open) {
-            this.contents.put(denom, this.contents.get(denom) + count);
-        } else {
-            throw new IllegalStateException("Cash drawer must be open to modify.");
+        if (!this.open) {
+            throw new IllegalStateException("Cash drawer must be open to modify."); 
         }
+        this.contents.put(denom, this.contents.get(denom) + count);
     }
     
     /**
@@ -96,17 +93,20 @@ public class CashDrawer {
      * @throws IllegalStateException if the drawer is not open
      */
     public void removeCount(CashDenomination denom, int count) {
-        if (this.open) {
-            this.contents.put(denom, this.contents.get(denom) - count);
-        } else {
+        if (!this.open) {
             throw new IllegalStateException("Cash drawer must be open to modify.");
         }
+        if (count > this.contents.get(denom)) {
+            throw new IllegalArgumentException("Cannot remove more than are present.");
+        }
+        this.contents.put(denom, this.contents.get(denom) - count);
     }
     
     /**
      * Open the cash drawer.
      *
      * @param amount the amount to be deposited
+     * @throws IllegalArgumentException if the amount is negative
      */
     public void open(double amount) {
         if (amount < 0) {
@@ -118,6 +118,10 @@ public class CashDrawer {
     
     /**
      * Close the cash drawer.
+     *
+     * <p>If the contents are incorrect, the drawer is not closed.
+     *
+     * @throws IllegalStateException if the cash drawer contents are incorrect
      */
     public void close() {
         this.open = false;

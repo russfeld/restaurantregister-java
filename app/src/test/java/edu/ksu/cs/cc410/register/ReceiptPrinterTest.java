@@ -1,4 +1,4 @@
-package edu.ksu.cs.cc410.restaurantregister;
+package edu.ksu.cs.cc410.register;
 
 import static org.hamcrest.MatcherAssert.assertThat; 
 import static org.hamcrest.Matchers.is;
@@ -62,7 +62,7 @@ public class ReceiptPrinterTest {
     public void testPrintLineThrowsIfLineTooLong() throws Exception {
         printer.startReceipt();
         Exception e = assertThrows(IllegalArgumentException.class, () ->
-                    printer.printLine("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaas"));
+                    printer.printLine("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
         assertThat(e.getMessage(), is("Text longer than 40 characters."));
     }
     
