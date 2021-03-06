@@ -77,10 +77,14 @@ public class CashDrawer {
      * @param denom the denomination to add to
      * @param count the count to add
      * @throws IllegalStateException if the drawer is not open
+     * @throws IllegalArgumentException if the count is negative
      */
     public void addCount(CashDenomination denom, int count) {
         if (!this.open) {
             throw new IllegalStateException("Cash drawer must be open to modify."); 
+        }
+        if (count < 0) {
+            throw new IllegalArgumentException("Count must not be negative.");
         }
         this.contents.put(denom, this.contents.get(denom) + count);
     }
@@ -91,10 +95,15 @@ public class CashDrawer {
      * @param denom the denomination to remove from
      * @param count the count to remove
      * @throws IllegalStateException if the drawer is not open
+     * @throws IllegalArgumentException if the count is negative
+     * @throws IllegalArgumentException if the count is more than the number present
      */
     public void removeCount(CashDenomination denom, int count) {
         if (!this.open) {
             throw new IllegalStateException("Cash drawer must be open to modify.");
+        }
+        if (count < 0) {
+            throw new IllegalArgumentException("Count must not be negative.");
         }
         if (count > this.contents.get(denom)) {
             throw new IllegalArgumentException("Cannot remove more than are present.");

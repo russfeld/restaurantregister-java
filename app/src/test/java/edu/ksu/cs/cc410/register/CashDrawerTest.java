@@ -84,6 +84,31 @@ public class CashDrawerTest {
     }
     
     /**
+     * Add Count must not be negative.
+     */
+    @Test
+    public void testAddCountNegative() {
+        CashDrawer drawer = new CashDrawer();
+        drawer.open(0.0);
+        Exception e = assertThrows(IllegalArgumentException.class, () ->
+                    drawer.addCount(CashDenomination.PENNY, -1));
+        assertThat(e.getMessage(), is("Count must not be negative."));
+    }
+    
+    /**
+     * Remove Count must not be negative.
+     */
+    @Test
+    public void testRemoveCountNegative() {
+        CashDrawer drawer = new CashDrawer();
+        drawer.open(0.0);
+        Exception e = assertThrows(IllegalArgumentException.class, () ->
+                    drawer.removeCount(CashDenomination.PENNY, -1));
+        assertThat(e.getMessage(), is("Count must not be negative."));
+    }
+    
+    
+    /**
      * Cash amount changed must balance.
      */
     @Test
