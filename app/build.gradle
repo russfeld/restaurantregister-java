@@ -65,7 +65,7 @@ javadoc {
     destinationDir = file("${rootDir}/docs/")
 }
 
-version = 'v0.1.4'
+version = 'v1.0.0'
 
 java {
     withSourcesJar()

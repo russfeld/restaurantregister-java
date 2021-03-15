@@ -91,6 +91,7 @@ public class ReceiptPrinter {
         writer.write("========================================\n");
         writer.write("**** RECEIPT END: " + this.format.format(LocalDateTime.now()) + " ****\n");
         writer.write("========================================\n");
+        writer.flush();
     }
     
     /**
