@@ -21,6 +21,7 @@ on:
 permissions:
   contents: read
   packages: write
+  actions: write
 
 # Define a single job named build
 jobs:
