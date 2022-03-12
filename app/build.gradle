@@ -62,7 +62,7 @@ checkstyle {
 javadoc {
     // classpath += project.sourceSets.test.compileClasspath
     // source += project.sourceSets.test.allJava
-    destinationDir = file("${rootDir}/docs/")
+    // destinationDir = file("${rootDir}/docs/")
 }
 
 version = 'v1.0.0'
@@ -78,7 +78,7 @@ tasks.named('jar') {
                    'Implementation-Version': project.version)
     }
     archivesBaseName = project.name
-    destinationDirectory = file("${rootDir}/dist/")
+    // destinationDirectory = file("${rootDir}/dist/")
 }
 
 tasks.named('sourcesJar') {
@@ -87,7 +87,7 @@ tasks.named('sourcesJar') {
                    'Implementation-Version': project.version)
     }
     archivesBaseName = project.name
-    destinationDirectory = file("${rootDir}/dist/")
+    // destinationDirectory = file("${rootDir}/dist/")
 }
 
 tasks.named('javadocJar') {
@@ -96,5 +96,5 @@ tasks.named('javadocJar') {
                    'Implementation-Version': project.version)
     }
     archivesBaseName = project.name
-    destinationDirectory = file("${rootDir}/dist/")
+    // destinationDirectory = file("${rootDir}/dist/")
 }
