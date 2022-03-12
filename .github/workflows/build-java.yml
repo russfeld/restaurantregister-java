@@ -6,12 +6,14 @@
 # Workflow name
 name: Build Java
 
-# Run only on pushes and pull requests on main branch
+# Run only on pushes and pull requests on main branch, as well as tags
 # https://docs.github.com/en/actions/using-workflows/triggering-a-workflow
 on:
   push:
     branches:
       - main
+    tags:
+      - "v*.*.*"
   pull_request:
     branches:    
       - main
