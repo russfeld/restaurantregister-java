@@ -30,11 +30,13 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           arguments: test
+      # https://github.com/marketplace/actions/junit-report-action
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v2
+        if: always() # always run even if the previous step fails
+        with:
+          report_paths: '**/build/test-results/test/TEST-*.xml'
       - name: Check Style with Gradle
         uses: gradle/gradle-build-action@v2
         with:
           arguments: check
-      - name: Check Style with Gradle
-        uses: gradle/gradle-build-action@v2
-        with:
-          arguments: javadoc

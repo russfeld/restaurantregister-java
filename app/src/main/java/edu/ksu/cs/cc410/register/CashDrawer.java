@@ -22,7 +22,8 @@ import java.util.HashMap;
  * @version 0.1
  * @see edu.ksu.cs.cc410.register.CashDenomination
  */
-public class CashDrawer {
+public class CashDrawer
+{
     
     private HashMap<CashDenomination, Integer> contents;
     private boolean open;
@@ -34,7 +35,7 @@ public class CashDrawer {
     public CashDrawer() {
         this.contents = new HashMap<>();
         for (CashDenomination denom : CashDenomination.values()) {
-            contents.put(denom, 10);
+            contents.put(denom, 9);
         }
         this.open = false;
         this.updatedTotal = 0;
