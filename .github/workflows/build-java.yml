@@ -18,10 +18,10 @@ on:
 
 # Permissions required to deploy release packages
 # https://docs.github.com/en/actions/publishing-packages/publishing-java-packages-with-gradle#publishing-packages-to-github-packages
-permissions:
-  contents: read
-  packages: write
-  actions: write
+#permissions:
+#  contents: read
+#  packages: write
+#  actions: write
 
 # Define a single job named build
 jobs:
