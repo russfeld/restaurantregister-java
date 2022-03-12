@@ -1,6 +1,9 @@
 # CC 410 Restaurant Register
 
-![Build](https://github.com/russfeld/restaurantregister-java/actions/workflows/build-java.yml/badge.svg)
+[![License](https://img.shields.io/github/license/russfeld/restaurantregister-java)](https://github.com/russfeld/restaurantregister-java/blob/main/LICENSE)
+[![Latest Release](https://img.shields.io/github/v/release/russfeld/restaurantregister-java)](https://github.com/russfeld/restaurantregister-java/releases)
+[![Build](https://github.com/russfeld/restaurantregister-java/actions/workflows/build-java.yml/badge.svg)](https://github.com/russfeld/restaurantregister-java/actions/workflows/build-java.yml)
+[![GitHub deployments](https://img.shields.io/github/deployments/russfeld/restaurantregister-java/github-pages?label=docs)](https://russfeld.github.io/restaurantregister-java/)
 ![Coverage](.github/badges/jacoco.svg)
 ![Branches](.github/badges/branches.svg)
 

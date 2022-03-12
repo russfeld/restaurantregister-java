@@ -22,8 +22,7 @@ import java.util.HashMap;
  * @version 0.1
  * @see edu.ksu.cs.cc410.register.CashDenomination
  */
-public class CashDrawer
-{
+public class CashDrawer {
     
     private HashMap<CashDenomination, Integer> contents;
     private boolean open;
