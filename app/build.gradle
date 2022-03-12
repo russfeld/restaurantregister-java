@@ -13,6 +13,8 @@ plugins {
     id 'jacoco'
     // Checkstyle plugin for linting
     id 'checkstyle'
+    // Publish Packages
+    id 'maven-publish'
 }
 
 repositories {
@@ -65,7 +67,7 @@ javadoc {
     // destinationDir = file("${rootDir}/docs/")
 }
 
-version = 'v1.0.1'
+version = 'v1.0.2'
 
 java {
     withSourcesJar()
@@ -97,4 +99,17 @@ tasks.named('javadocJar') {
     }
     archivesBaseName = project.name
     // destinationDirectory = file("${rootDir}/dist/")
+}
+
+publishing {
+  repositories {
+    maven {
+      name = "GitHubPackages"
+      url = "https://maven.pkg.github.com/russfeld/restaurantregister-java"
+      credentials {
+        username = System.getenv("GITHUB_ACTOR")
+        password = System.getenv("GITHUB_TOKEN")
+      }
+    }
+  }
 }

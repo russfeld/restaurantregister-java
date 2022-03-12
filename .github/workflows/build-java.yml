@@ -1,74 +1,137 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
+# Build Java Workflow
+# 
+# Based on Starter Workflow Here
 # https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle#using-the-gradle-starter-workflow
 
-name: Java CI
+# Workflow name
+name: Build Java
 
-on: [push]
+# Run only on pushes and pull requests on main branch
+# https://docs.github.com/en/actions/using-workflows/triggering-a-workflow
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:    
+      - main
 
+# Permissions required to deploy release packages
+# https://docs.github.com/en/actions/publishing-packages/publishing-java-packages-with-gradle#publishing-packages-to-github-packages
+permissions:
+  contents: read
+  packages: write
+
+# Define a single job named build
 jobs:
   build:
+
+    # Run job on Ubuntu runner
     runs-on: ubuntu-latest
+
+    # Job Steps
     steps:
-      - name: Checkout Repository
+
+      # Step 1 - Checkout the Repository
+      # https://github.com/actions/checkout
+      - name: 1 - Checkout Repository
         uses: actions/checkout@v2
-      - name: Set up JDK 8
+      
+      # Step 2 - Set up Java 8
+      # https://github.com/actions/setup-java
+      - name: 2- Set up JDK 8
         uses: actions/setup-java@v2
         with:
-          java-version: '8'
-          distribution: 'temurin'
-      - name: Validate Gradle wrapper
+          java-version: '8'         # Use Java Version 8
+          distribution: 'temurin'   # Use the temurin Java JDK
+
+      # Step 3 - Validate Gradle Wrapper
+      # https://github.com/gradle/wrapper-validation-action
+      - name: 3- Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@v1
-      - name: Build with Gradle
+      
+      # ----------------------------------------------------------
+      # THE ACTUAL BUILD STEP!
+      # ----------------------------------------------------------
+      # Step 4 - Build Project with Gradle
+      # https://github.com/gradle/gradle-build-action
+      - name: 4 - Build with Gradle
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: build
+          arguments: build          # Gradle action to run
+      # ----------------------------------------------------------
+      
+      # Step 5A - Publish JUnit Report
+      # https://github.com/marketplace/actions/junit-report-action
+      - name: 5A - Publish JUnit Report
+        uses: mikepenz/action-junit-report@v2
+        if: always()                # always run even if the previous step fails
+        with:
+          report_paths: app/build/test-results/test/TEST-*.xml
+      
+      # Step 5B - Publish Checkstyle Report
+      - name: 5B - Publish Checkstyle Report
+        uses: jwgmeligmeyling/checkstyle-github-action@master
+        if: always()                # always run even if the previous step fails
+        with:
+          path: app/build/reports/checkstyle/*.xml
+          
+      # ----------------------------------------------------------
+      # THESE ONLY RUN IF BUILD SUCCEEDS
+      # ----------------------------------------------------------
+
+      # Step 6 - Save JAR Files from Build
       # https://github.com/actions/upload-artifact
-      - name: Archive JAR Files
+      - name: 6 - Archive JAR Files
         uses: actions/upload-artifact@v3
         with:
-          name: dist
           path: |
             app/build/libs/*.jar
-      # https://github.com/marketplace/actions/junit-report-action
-      - name: Publish Test Report
-        uses: mikepenz/action-junit-report@v2
-        if: always() # always run even if the previous step fails
-        with:
-          report_paths: app/build/test-results/test/TEST-*.xml'
-      - name: Publish Checkstyle Report
-        uses: jwgmeligmeyling/checkstyle-github-action@master
-        if: always() # always run even if the previous step fails
-        with:
-          path: 'app/build/reports/checkstyle/*.xml'
+
+      # Step 7A - Generate JaCoCo Badges
       # https://github.com/marketplace/actions/jacoco-badge-generator
-      - name: Generate JaCoCo Badge
+      - name: 7A - Generate JaCoCo Badge
         uses: cicirello/jacoco-badge-generator@v2
         with:
           generate-branches-badge: true
           jacoco-csv-file: app/build/reports/jacoco/test/jacocoTestReport.csv
-      # Commit Badges
+
+      # Step 7B - Commit JaCoCo Badges (if changed - will make new commit)
       # https://github.com/EndBug/add-and-commit
-      - name: Commit and Push Badges
+      - name: 7B - Commit and Push Badges
         uses: EndBug/add-and-commit@v9
         with:
           default_author: github_actions
           message: 'commit badge'
           add: '*.svg'
-      # Deploy Docs
+        
+      # ----------------------------------------------------------
+      # THESE ONLY RUN IF NEW TAG IS PUSHED - WILL CREATE RELEASE
+      # ----------------------------------------------------------
+
+      # Step 8 - Deploy JavaDoc to GitHub Pages
       # https://github.com/JamesIves/github-pages-deploy-action
-      - name: Deploy JavaDoc
+      - name: 8 - Deploy JavaDoc
         uses: JamesIves/github-pages-deploy-action@v4.2.5
+        if: startsWith(github.ref, 'refs/tags/')
         with:
-          branch: gh-pages # The branch the action should deploy to.
-          folder: app/build/docs/javadoc/ # The folder the action should deploy.
-      # Make Release
+          branch: gh-pages                  # The branch the action should deploy to
+          folder: app/build/docs/javadoc/   # The folder the action should deploy
+      
+      # Step 9 - Make Release on GitHub
       # https://github.com/softprops/action-gh-release
-      - name: Release
+      - name: 9 - Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: app/build/libs/*.jar
+      
+      # Step 10 - Publish Package to GitHub
+      # https://github.com/gradle/gradle-build-action
+      # https://docs.github.com/en/actions/publishing-packages/publishing-java-packages-with-gradle
+      - name: Publish package
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: publish               # Gradle action to run
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
