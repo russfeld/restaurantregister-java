@@ -32,18 +32,18 @@ jobs:
         with:
           name: dist
           path: |
-            dist
+            app/build/libs/*.jar
       # https://github.com/marketplace/actions/junit-report-action
       - name: Publish Test Report
         uses: mikepenz/action-junit-report@v2
         if: always() # always run even if the previous step fails
         with:
-          report_paths: '**/build/test-results/test/TEST-*.xml'
+          report_paths: app/build/test-results/test/TEST-*.xml'
       - name: Publish Checkstyle Report
         uses: jwgmeligmeyling/checkstyle-github-action@master
         if: always() # always run even if the previous step fails
         with:
-          path: '**/build/reports/checkstyle/*.xml'
+          path: 'app/build/reports/checkstyle/*.xml'
       # https://github.com/marketplace/actions/jacoco-badge-generator
       - name: Generate JaCoCo Badge
         uses: cicirello/jacoco-badge-generator@v2
@@ -52,9 +52,23 @@ jobs:
           jacoco-csv-file: app/build/reports/jacoco/test/jacocoTestReport.csv
       # Commit Badges
       # https://github.com/EndBug/add-and-commit
-      - name: Commit and push the badge (if it changed)
+      - name: Commit and Push Badges
         uses: EndBug/add-and-commit@v9
         with:
           default_author: github_actions
           message: 'commit badge'
           add: '*.svg'
+      # Deploy Docs
+      # https://github.com/JamesIves/github-pages-deploy-action
+      - name: Deploy JavaDoc
+        uses: JamesIves/github-pages-deploy-action@4.2.5
+        with:
+          branch: gh-pages # The branch the action should deploy to.
+          folder: app/build/docs/javadoc/ # The folder the action should deploy.
+      # Make Release
+      # https://github.com/softprops/action-gh-release
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: app/build/libs/*.jar
