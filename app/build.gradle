@@ -49,7 +49,7 @@ jacocoTestReport {
     dependsOn test // tests are required to run before generating the report
     reports {
         xml.enabled false
-        csv.enabled false
+        csv.enabled true
         html.destination file("${buildDir}/reports/jacoco")
     }
 }

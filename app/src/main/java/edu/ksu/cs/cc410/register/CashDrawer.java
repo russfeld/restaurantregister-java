@@ -35,7 +35,7 @@ public class CashDrawer
     public CashDrawer() {
         this.contents = new HashMap<>();
         for (CashDenomination denom : CashDenomination.values()) {
-            contents.put(denom, 9);
+            contents.put(denom, 10);
         }
         this.open = false;
         this.updatedTotal = 0;
