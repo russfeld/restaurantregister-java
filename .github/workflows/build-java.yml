@@ -38,6 +38,7 @@ jobs:
       # Step 1A - Checkout Badges Branch
       # https://github.com/cicirello/examples-jacoco-badge-generator/blob/main/.github/workflows/build-badges-branch.yml
       - name: 1B - Checkout Badges Branch
+        uses: actions/checkout@v2
         with:
           ref: badges
           path: badges
