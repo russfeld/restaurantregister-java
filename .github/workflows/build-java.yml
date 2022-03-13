@@ -18,13 +18,6 @@ on:
     branches:    
       - main
 
-# Permissions required to deploy release packages
-# https://docs.github.com/en/actions/publishing-packages/publishing-java-packages-with-gradle#publishing-packages-to-github-packages
-#permissions:
-#  contents: read
-#  packages: write
-#  actions: write
-
 # Define a single job named build
 jobs:
   build:
@@ -35,14 +28,21 @@ jobs:
     # Job Steps
     steps:
 
-      # Step 1 - Checkout the Repository
+      # Step 1A - Checkout the Repository
       # https://github.com/actions/checkout
-      - name: 1 - Checkout Repository
+      - name: 1A - Checkout Repository
         uses: actions/checkout@v2
+
+      # Step 1A - Checkout Badges Branch
+      # https://github.com/cicirello/examples-jacoco-badge-generator/blob/main/.github/workflows/build-badges-branch.yml
+      - name: 1B - Checkout Badges Branch
+        with:
+          ref: badges
+          path: badges
       
       # Step 2 - Set up Java 8
       # https://github.com/actions/setup-java
-      - name: 2- Set up JDK 8
+      - name: 2 - Set up JDK 8
         uses: actions/setup-java@v2
         with:
           java-version: '8'         # Use Java Version 8
@@ -50,7 +50,7 @@ jobs:
 
       # Step 3 - Validate Gradle Wrapper
       # https://github.com/gradle/wrapper-validation-action
-      - name: 3- Validate Gradle wrapper
+      - name: 3 - Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@v1
       
       # ----------------------------------------------------------
@@ -96,16 +96,19 @@ jobs:
       - name: 7A - Generate JaCoCo Badge
         uses: cicirello/jacoco-badge-generator@v2
         with:
+          # https://github.com/cicirello/examples-jacoco-badge-generator/blob/main/.github/workflows/build-badges-branch.yml
+          badges-directory: badges
           generate-branches-badge: true
           jacoco-csv-file: app/build/reports/jacoco/test/jacocoTestReport.csv
 
-      # Step 7B - Commit JaCoCo Badges (if changed - will make new commit)
+      # Step 7B - Commit JaCoCo Badges (if changed - will make new commit in the Badges branch)
       # https://github.com/EndBug/add-and-commit
       - name: 7B - Commit and Push Badges
         uses: EndBug/add-and-commit@v9
         with:
           default_author: github_actions
           message: 'commit badge'
+          cwd: './badges'
           add: '*.svg'
         
       # ----------------------------------------------------------
